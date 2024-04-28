@@ -33,10 +33,10 @@ function saveAppDataToLocalStorage (appData: StorageLayout) {
 /**
  * Saves a given profile to storage, potentially overwriting an existing one.
  *
- * @param   {string}                     name   The name of the profile
- * @param   {Partial<InternalDefaults>}  value  The data to save
+ * @param   {string}                     name  The name of the profile
+ * @param   {Partial<InternalDefaults>}  data  The data to save
  */
-function saveProfileToLocalStorage (name: string, value: Partial<InternalDefaults>) {
+function saveProfileToLocalStorage (name: string, data: Partial<InternalDefaults>) {
   if (name.trim() === '') {
     console.error('Cannot save profile: No name given.')
     return
@@ -44,12 +44,12 @@ function saveProfileToLocalStorage (name: string, value: Partial<InternalDefault
 
   try {
     const appData = getAppDataFromLocalStorage()
-  
     const existingIndex = appData.profiles.findIndex(x => x.name === name)
-    if (existingIndex > 0) {
-      appData.profiles.splice(existingIndex, 1, { name, data: value })
+
+    if (existingIndex > -1) {
+      appData.profiles.splice(existingIndex, 1, { name, data })
     } else {
-      appData.profiles.push({ name, data: value })
+      appData.profiles.push({ name, data })
     }
   
     saveAppDataToLocalStorage(appData)
@@ -117,7 +117,7 @@ export const useAppStore = defineStore('app-store', () => {
 
   function createNewProfile (name = 'Untitled.yml', template: Partial<InternalDefaults> = {}) {
     // Save the current profile, if applicable
-    if (currentProfile.value !== undefined) {
+    if (currentProfile.value !== undefined && currentProfileName.value.trim() !== '') {
       saveProfileToLocalStorage(currentProfileName.value, currentProfile.value)
     }
 
@@ -138,7 +138,6 @@ export const useAppStore = defineStore('app-store', () => {
   }
 
   function updateCurrentProfile (newValues: Partial<InternalDefaults>) {
-    console.log(newValues)
     currentProfile.value = {
       ...currentProfile.value,
       ...newValues
