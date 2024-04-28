@@ -214,7 +214,15 @@ export function parseFromYAML (source: Record<string, any>): Partial<InternalDef
     ret.filters = []
     for (const item of source.filters) {
       if (typeof item === 'string') {
-        ret.filters.push(item)
+        if (item === 'citeproc') {
+          ret.filters.push({ type: 'citeproc', path: '' })
+        } else {
+          const isJSON = item.endsWith('.json')
+          ret.filters.push({
+            type: isJSON ? 'json' : 'lua',
+            path: item
+          })
+        }
       } else if (typeof item === 'object' && !Array.isArray(item)) {
         if ('type' in item && ['citeproc', 'json', 'lua'].includes(item.type)) {
           const newItem: any = { type: item.type }
@@ -275,6 +283,15 @@ export function internalDefaultsToYAML (source: Partial<InternalDefaults>): stri
       retObject[key] = readerWriterToString(source[key] as any)
     } else if (key === 'html-math-method') {
       retObject['html-math-method'] = { method: source[key] as any }
+    } else if (key === 'filter' && source.filters !== undefined) {
+      // Transform the filters to ensure citeproc is treated differently
+      retObject.filters = source.filters.map(x => {
+        if (x.type === 'citeproc') {
+          return 'citeproc'
+        } else {
+          return x
+        }
+      })
     } else {
       // @ts-expect-error We know that the rest of the properties align
       retObject[key] = source[key]

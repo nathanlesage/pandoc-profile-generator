@@ -739,7 +739,8 @@ export interface InternalDefaults {
   'indented-code-classes': string[]
   'default-image-extension': string
   'file-scope': true
-  filters: Array<'citeproc'|string|{ type: 'citeproc' }|{ type: 'json'|'lua', path: string }>
+  // NOTE: Simplification, any paths of citeproc filters will be removed on export
+  filters?: Array<{ type: 'json'|'lua'|'citeproc', path: string }>
   'lua-filter': string
   metadata: Record<string, any>
   'metadata-files': string[]
