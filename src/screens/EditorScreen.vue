@@ -276,9 +276,32 @@
           </template>
         </CheckboxElement>
 
-        <!-- TODO: FILTERS
-          filters?: Array<'citeproc'|string|{ type: 'citeproc' }|{ type: 'json'|'lua', path: string }>
-        -->
+        <FilterElement
+          v-bind:element="'filters'"
+          v-bind:profile="props.profile"
+          v-bind:label="'Filters'"
+        >
+          <template v-slot:description>
+            A "filter" is a program that modifies the AST, between the reader
+            and the writer.<br>
+            <br>
+            <pre><code>INPUT --reader--&gt; AST --filter--&gt; AST --writer--&gt; OUTPUT</code></pre><br>
+            <br>
+            Each filter has a type, <code>lua</code> or <code>json</code>, and a
+            path to it (relative or absolute). Pandoc supports two kinds of
+            filters:<br>
+            <br>
+            Lua filters use the Lua language to define transformations on the
+            pandoc AST. They are described in a separate document.<br>
+            <br>
+            JSON filters, described here, are pipes that read from standard
+            input and write to standard output, consuming and producing a JSON
+            representation of the pandoc AST.<br>
+            <br>
+            Lastly, you can simply define a "citeproc" filter that will process
+            citations from the source document.
+          </template>
+        </FilterElement>
 
         <SingleStringElement
           v-bind:element="'lua-filter'"
@@ -318,7 +341,6 @@
           </template>
         </SingleStringElement>
 
-        <!-- TODO: metadata?: Record<string, string|boolean> -->
           <RecordElement
             v-bind:element="'metadata'"
             v-bind:profile="props.profile"
@@ -1467,6 +1489,7 @@ import SingleStringElement from 'src/form-elements/SingleStringElement.vue'
 import MultiStringElement from 'src/form-elements/MultiStringElement.vue'
 import NumberElement from 'src/form-elements/NumberElement.vue'
 import RecordElement from 'src/form-elements/RecordElement.vue'
+import FilterElement from 'src/form-elements/FilterElement.vue'
 import { InternalDefaults, pandocReaders, pandocWriters } from 'src/pandoc-defaults'
 import { useAppStore } from 'src/pinia'
 import { exportDefaults, internalDefaultsToYAML } from 'src/pandoc-transformer'

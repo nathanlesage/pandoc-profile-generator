@@ -2,22 +2,25 @@
     <div class="uk-margin uk-grid-column-small uk-grid-row-large uk-child-width-expand@s uk-grid-divider@m uk-card uk-card-default uk-card-body uk-padding" uk-grid>
     <div class="uk-width-1-3@m">
       <div v-if="props.profile[props.element] !== undefined">
-        <label for="input-files" class="uk-form-label">{{ props.label }}</label>
-        <a class="uk-icon-button" uk-icon="trash" title="Remove property"
-          v-on:click="updateCurrentProfile({ [props.element]: undefined })"
-        ></a>
+        <p>
+          {{ props.label }}
+
+          <a class="uk-icon-button" uk-icon="trash" title="Remove property"
+            v-on:click="updateCurrentProfile({ [props.element]: undefined })"
+          ></a>
+        </p>
 
         <div class="uk-margin">
           <div v-for="[key, value], i in Object.entries(props.profile[props.element] as Record<string, string>)" class="uk-margin">
-            <span class="uk-display-inline-block uk-margin-right">{{ key }}</span>
-            <div class="uk-inline">
+            <span class="uk-display-inline uk-margin-right uk-width-small">{{ key }}</span>
+            <div class="uk-display-inline">
               <a
                 class="uk-form-icon uk-form-icon-flip" href="" uk-icon="icon: trash"
                 title="Remove entry"
                 v-on:click.prevent="removeKey(key)"
               ></a>
               <input
-                class="uk-input"
+                class="uk-input uk-form-width-medium"
                 type="text"
                 placeholder="Enter value&hellip;"
                 v-bind:value="value"
