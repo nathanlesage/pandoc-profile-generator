@@ -1525,13 +1525,15 @@ function copyToClipboard () {
 <style>
 #download-button {
   position: fixed;
-  bottom: 10px;
+  bottom: 70px;
   right: 10px;
+  z-index: 5;
 }
 
 #close-button {
   position: fixed;
   top:10px;
   right: 10px;
+  z-index: 5;
 }
 </style>
